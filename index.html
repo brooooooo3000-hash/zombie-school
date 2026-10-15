@@ -137,8 +137,9 @@ html,body{margin:0!important;padding:0!important;background:#000!important;overf
 (function(){
   function fs(){var d=document.documentElement,f=d.requestFullscreen||d.webkitRequestFullscreen;
     if(f&&!document.fullscreenElement&&!document.webkitFullscreenElement){try{var p=f.call(d);if(p&&p.catch)p.catch(function(){});}catch(e){}}}
-  // картинку растягиваем на весь экран (экран телефона шире игры); адрес с ?bars=1 оставляет чёрные полосы по бокам
-  if(!/[?&]bars/.test(location.search)){var st=document.createElement('style');
+  // на телефоне картинку растягиваем на весь экран (экран шире игры), на компьютере остаётся как есть; адрес с ?bars=1 оставляет чёрные полосы по бокам
+  var touchDev=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+  if(touchDev&&!/[?&]bars/.test(location.search)){var st=document.createElement('style');
     st.textContent='#canvas{position:fixed!important;left:0!important;top:0!important;margin:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;image-rendering:pixelated}';
     document.head.appendChild(st);}
   document.addEventListener('touchend',fs,{once:true});
