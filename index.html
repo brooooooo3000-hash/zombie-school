@@ -142,6 +142,15 @@ html,body{margin:0!important;padding:0!important;background:#000!important;overf
   if(touchDev&&!/[?&]bars/.test(location.search)){var st=document.createElement('style');
     st.textContent='#canvas{position:fixed!important;left:0!important;top:0!important;margin:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;image-rendering:pixelated}';
     document.head.appendChild(st);}
+  // iPhone Safari неверно считает vh/dvh (внизу остаётся чёрная полоса), поэтому размер холста берём из реального окна
+  function fit(){var c=document.getElementById('canvas');
+    if(!c||!touchDev||/[?&]bars/.test(location.search))return;
+    var vv=window.visualViewport,w=Math.round(vv?vv.width:window.innerWidth),h=Math.round(vv?vv.height:window.innerHeight);
+    c.style.setProperty('width',w+'px','important');c.style.setProperty('height',h+'px','important');
+    c.style.setProperty('left','0','important');c.style.setProperty('top','0','important');window.scrollTo(0,0);}
+  ['resize','orientationchange','load'].forEach(function(n){window.addEventListener(n,function(){fit();setTimeout(fit,300);});});
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',fit);
+  setInterval(fit,500);
   document.addEventListener('touchend',fs,{once:true});
   ['gesturestart','gesturechange','contextmenu'].forEach(function(n){document.addEventListener(n,function(e){e.preventDefault();});});
 })();
